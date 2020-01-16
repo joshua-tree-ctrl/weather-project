@@ -13,7 +13,7 @@ $.ajax({
 $.ajax({
     type: "GET",
     url:"https://api.openweathermap.org/data/2.5/weather?q=" + location.city + "&units=metric&appid=8ec99075200cb619dd999c05b1906c24",
-    //url:"https://api.openweathermap.org/data/2.5/weather?q=london&units=metric&appid=8ec99075200cb619dd999c05b1906c24",
+   // url:"https://api.openweathermap.org/data/2.5/weather?q=london&units=metric&appid=8ec99075200cb619dd999c05b1906c24",
     success: function(weather) {
     console.log(weather);
     console.log(weather.weather[0].icon);
