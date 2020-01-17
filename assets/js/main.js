@@ -15,6 +15,7 @@ $.ajax({
     success: function(weather) {
     console.log(weather);
 
+    //FUNCTION TO DISPLAY
     loggedWeatherData = () => {
 
      /* //SETTING DATE & TIME IN SHORTHAND
@@ -27,36 +28,32 @@ $.ajax({
       weatherObject['code'] = weather.country_code;
       weatherObject['data'] = weather.data;
       weatherObject['time'] = weather.timezone;
-     
       // console.log(weatherObject);
+
+      //LOCATION DISPLAY
       $('.weather__location').append("Area " + weatherObject.city);
       $('.weather__location').append(" Country " + weatherObject.code);
-     //DATE LOOP 
-     //ICON LOOP
-     //TEMP LOOP 
-     //HIGH TEMP LOOP
-     //LOW TEMP LOOP
-     //https://www.weatherbit.io/static/img/icons/r01d.png EXAMPLE IMG 
-      
-
+     
+      //LOOPING WEATHER DATA FOR 3 DAYS 
       for (let i = 0; i < weatherObject.data.length; i++) {
+      //DATE LOOP 
       $('.weather__date').append('<div class="weather__date--' + i + '"> Dates:    ' + weatherObject.data[i].valid_date + '       </div>');
-      $('.weather__icon').append("<img src=\"https://www.weatherbit.io/static/img/icons/"  + weatherObject.data[i].weather.icon + ".png\" alt=\"weather icon\" class=\"weather__icon--\">");  
-      $('.weather__desc').append('<div class="weather__desc--' + i + '">  Descriptions:  ' + weatherObject.data[i].weather.description + '</div>');
-      $('.weather__temp').append('<div class="weather__temp--' + i + '">  Temps:  ' + weatherObject.data[i].temp + '</div>');  
-      $('.weather__temp').append('<div class="weather__temp__high--' + i + ' ">  Highs Of :   ' + weatherObject.data[i].max_temp + '</div>');  
-      $('.weather__temp').append('<div class="weather__temp__high--' + i + ' "> Lows Of   : ' + weatherObject.data[i].min_temp + '</div>');  
+      //ICON LOOP
+      $('.weather__icon').append('<img class="weather__icon--' + i + '" src="https://www.weatherbit.io/static/img/icons/' + weatherObject.data[i].weather.icon + '.png\" alt=\"weather icon\" ></img>'); 
+      //DESC LOOP 
+      $('.weather__desc').append('<div class="weather__desc--' + i +'">  Descriptions:  ' + weatherObject.data[i].weather.description + '</div>');
+      //TEMP LOOP 
+      $('.weather__temp').append('<div class="weather__temp--' + i +'">  Temps:  ' + weatherObject.data[i].temp + '</div>');  
+      //HIGH TEMP LOOP
+      $('.weather__high').append('<div class="weather__temp__high--' + i +'">  Highs Of :   ' + weatherObject.data[i].max_temp + '</div>');  
+      //LOW TEMP LOOP
+      $('.weather__low').append('<div class="weather__temp__high--' + i +'"> Lows Of   : ' + weatherObject.data[i].min_temp + '</div>');  
         } 
-
-
       return weatherObject; 
     };
+
     loggedWeatherData();
-    //console.log(loggedWeatherData());
-
-      
-
-
+    
      }, 
     beforeSend: function() {
     console.log("loading");
