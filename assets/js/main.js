@@ -12,7 +12,7 @@ $.ajax({
      //Open Weather Map API AJAX Call inside geolocation API, as the geolocation call is in jsonp data type which does not support synchronous operation, so I cannot simply pass initial ajax call as false. Could do callback function with ajax to obtain data, and then build the html from that callback function data? alternative could be handlebars?
 $.ajax({
     type: "GET",
-    url:"https://api.openweathermap.org/data/2.5/weather?q=" + location.city + "&units=metric&appid=8ec99075200cb619dd999c05b1906c24",
+    url:"https://api.openweathermap.org/data/2.5/weather?q=" + location.city + "," + location.country_code + "&units=metric&appid=8ec99075200cb619dd999c05b1906c24",
    // url:"https://api.openweathermap.org/data/2.5/weather?q=london&units=metric&appid=8ec99075200cb619dd999c05b1906c24",
     success: function(weather) {
     console.log(weather);
