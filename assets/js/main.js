@@ -6,28 +6,34 @@ $.ajax({
     jsonpCallback: "callback",
     dataType: "jsonp",
     success: function(location) {
-   // console.log(location);
-
+    console.log(location);
+    let location_city = location.city;
+    let location_cc = location.country_code;
      //Open Weather Map API AJAX Call inside geolocation API, as the geolocation call is in jsonp data type which does not support synchronous operation, so I cannot simply pass initial ajax call as false. Could do callback function with ajax to obtain data, and then build the html from that callback function data? alternative could be handlebars?
 $.ajax({
     type: "GET",
-    url:"https://api.weatherbit.io/v2.0/forecast/daily?city=" + location.city + "," + location.country_code + "&days=3&key=959dca19c5aa40b084f4991fa3a58145",
+    url:"https://api.weatherbit.io/v2.0/forecast/daily?city="+location_city+","+location_cc+"&days=4&key=959dca19c5aa40b084f4991fa3a58145",
+    //url:"https://api.weatherbit.io/v2.0/forecast/daily?city=London,GB&days=3&key=959dca19c5aa40b084f4991fa3a58145",
     success: function(weather) {
     console.log(weather);
 
     //FUNCTION TO DISPLAY
     loggedWeatherData = () => {
 
-     /* //SETTING DATE & TIME IN SHORTHAND
-      let date = new Date();
+      //SETTING DATE & TIME IN SHORTHAND
+      /*let date = new Date();
+      console.log(date);
       var options = {  month: 'numeric', day: 'numeric' };
-      let displayDate = date.toLocaleDateString("en-US", options); */ 
+      let displayDate = date.toLocaleDateString("en-US", options); 
+      console.log(displayDate); 
+      $('.weather').append(displayDate); */
       
       let weatherObject = {};
       weatherObject['city'] = weather.city_name;
       weatherObject['code'] = weather.country_code;
       weatherObject['data'] = weather.data;
       weatherObject['time'] = weather.timezone;
+      
       // console.log(weatherObject);
 
       //LOCATION DISPLAY
@@ -53,7 +59,7 @@ $.ajax({
     };
 
     loggedWeatherData();
-    
+
      }, 
     beforeSend: function() {
     console.log("loading");
