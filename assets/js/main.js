@@ -1,6 +1,68 @@
+ //Ajax location function 
+ajaxLocation = () => {
+  return $.ajax({
+    type:"GET",
+    url: "https://geolocation-db.com/jsonp/0f761a30-fe14-11e9-b59f-e53803842572 ",
+    jsonpCallback: "callback",
+    dataType: "jsonp",
+    //finds location without needing success here 
+  //  success: function(location) {
+   // console.log(location);
+  //  },
+    beforeSend: function() {
+        //console.log("loading");
+        },
+        error: function() {
+          alert("There was an error getting location data.");
+        }
+  });
+};
 
-// Initial AJAX Call to Geolocate user, on success of obtaining data, chain second AJAX call and add the location.city to the AJAX URL. 
+
+//jQuery Promise, when ajaxLocation() is done, pass results of ajaxLocation() to location parameter 
+weatherFunc = () => {
+$.when(ajaxLocation()).done(function(location) {
+//Use ajaxLocation function results stored in location to provide location to URL string for weather API call
 $.ajax({
+  type: "GET",
+  url:"https://api.weatherbit.io/v2.0/forecast/daily?city="+location.city+","+location.country_code+"&days=4&key=959dca19c5aa40b084f4991fa3a58145",
+  //url:"https://api.weatherbit.io/v2.0/forecast/daily?city=London,GB&days=3&key=959dca19c5aa40b084f4991fa3a58145",
+  success: function(weather) {
+ // console.log(weather);
+   }, 
+  beforeSend: function() {
+ // console.log("loading");
+  },
+  error: function() {
+    alert("There was an error getting weather data.");
+  }
+});
+});
+}
+
+
+
+$.when(weatherFunc()).done(function(weather) {
+
+  console.log(weather);
+
+});
+
+//ROUNDING TEMP FUNCTION
+tempRound = (temp) => {
+  return Math.round(temp);
+ };
+
+
+
+
+
+
+
+/*
+
+// Weatherbit AJAX Call to Geolocate. Success of geolocation chains to another AJAX call for weather. 
+geoCall = () => { $.ajax({
     type:"GET",
     url: " https://geolocation-db.com/jsonp/0f761a30-fe14-11e9-b59f-e53803842572 ",
     jsonpCallback: "callback",
@@ -10,6 +72,19 @@ $.ajax({
     let location_city = location.city;
     let location_cc = location.country_code;
      //Open Weather Map API AJAX Call inside geolocation API, as the geolocation call is in jsonp data type which does not support synchronous operation, so I cannot simply pass initial ajax call as false. Could do callback function with ajax to obtain data, and then build the html from that callback function data? alternative could be handlebars?
+    },
+    beforeSend: function() {
+        console.log("loading");
+        },
+        error: function() {
+          alert("There was an error getting location data.");
+        }
+  });
+} /*
+
+geoCall();
+
+/*
 $.ajax({
     type: "GET",
     url:"https://api.weatherbit.io/v2.0/forecast/daily?city="+location_city+","+location_cc+"&days=4&key=959dca19c5aa40b084f4991fa3a58145",
@@ -17,43 +92,44 @@ $.ajax({
     success: function(weather) {
     console.log(weather);
 
-    //FUNCTION TO DISPLAY
+    //FUNCTION 
     loggedWeatherData = () => {
+    //DATE FORMATTING OPTIONS
+    let options = {  month: 'numeric', day: 'numeric' };
+    
+    //DECLARING AND CREATING KEY/VALUE PAIRS.
+    let weatherObject = {};
+    weatherObject['city'] = weather.city_name;
+    weatherObject['code'] = weather.country_code;
+    weatherObject['data'] = weather.data;
+    weatherObject['time'] = weather.timezone;
 
-      //SETTING DATE & TIME IN SHORTHAND
-      /*let date = new Date();
-      console.log(date);
-      var options = {  month: 'numeric', day: 'numeric' };
-      let displayDate = date.toLocaleDateString("en-US", options); 
-      console.log(displayDate); 
-      $('.weather').append(displayDate); */
-      
-      let weatherObject = {};
-      weatherObject['city'] = weather.city_name;
-      weatherObject['code'] = weather.country_code;
-      weatherObject['data'] = weather.data;
-      weatherObject['time'] = weather.timezone;
-      
-      // console.log(weatherObject);
-
-      //LOCATION DISPLAY
-      $('.weather__location').append("Area " + weatherObject.city);
-      $('.weather__location').append(" Country " + weatherObject.code);
+    
+    //LOCATION DISPLAY
+      $('.weather__location').append("Area: " + weatherObject.city + ", " + weatherObject.code);
      
-      //LOOPING WEATHER DATA FOR 3 DAYS 
-      for (let i = 0; i < weatherObject.data.length; i++) {
+
+    //LOOPING WEATHER DATA FOR 4 DAYS 
+    for (let i = 0; i < weatherObject.data.length; i++) {
+
+    //DATE FORMATTING
+    let weatherDate = weatherObject.data[i].valid_date;
+    let dateParse = new Date(weatherDate);
+    let dateFormatted = dateParse.toLocaleDateString("en-US", options); 
+    
+
       //DATE LOOP 
-      $('.weather__date').append('<div class="weather__date--' + i + '"> Dates:    ' + weatherObject.data[i].valid_date + '       </div>');
+      $('.weather__date').append('<div class="weather__date--' + i + '"> Dates:    ' + dateFormatted + '       </div>');
       //ICON LOOP
       $('.weather__icon').append('<img class="weather__icon--' + i + '" src="https://www.weatherbit.io/static/img/icons/' + weatherObject.data[i].weather.icon + '.png\" alt=\"weather icon\" ></img>'); 
       //DESC LOOP 
       $('.weather__desc').append('<div class="weather__desc--' + i +'">  Descriptions:  ' + weatherObject.data[i].weather.description + '</div>');
       //TEMP LOOP 
-      $('.weather__temp').append('<div class="weather__temp--' + i +'">  Temps:  ' + weatherObject.data[i].temp + '</div>');  
+      $('.weather__temp').append('<div class="weather__temp--' + i +'">  Temps:  ' +  tempRound(weatherObject.data[i].temp) + '</div>');  
       //HIGH TEMP LOOP
-      $('.weather__high').append('<div class="weather__temp__high--' + i +'">  Highs Of :   ' + weatherObject.data[i].max_temp + '</div>');  
+      $('.weather__high').append('<div class="weather__temp__high--' + i +'">  Highs Of :   ' + tempRound(weatherObject.data[i].max_temp) + '</div>');  
       //LOW TEMP LOOP
-      $('.weather__low').append('<div class="weather__temp__high--' + i +'"> Lows Of   : ' + weatherObject.data[i].min_temp + '</div>');  
+      $('.weather__low').append('<div class="weather__temp__high--' + i +'"> Lows Of   : ' + tempRound(weatherObject.data[i].min_temp) + '</div>');  
         } 
       return weatherObject; 
     };
@@ -68,14 +144,11 @@ $.ajax({
       alert("There was an error getting weather data.");
     }
   });
-    },
-    beforeSend: function() {
-        console.log("loading");
-        },
-        error: function() {
-          alert("There was an error getting location data.");
-        }
-  });
+*/
+
+
+
+
   
 
 
