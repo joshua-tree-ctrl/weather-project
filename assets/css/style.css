@@ -7,7 +7,6 @@
 *::before {
   margin: 0;
   padding: 0;
-  -webkit-box-sizing: inherit;
   box-sizing: inherit; }
 
 html {
@@ -15,29 +14,19 @@ html {
   /* 16px */ }
 
 body {
-  -webkit-box-sizing: border-box;
   box-sizing: border-box; }
 
 body {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 1.6rem;
   line-height: 1.7;
   min-height: 100vh;
   background: linear-gradient(230deg, #fea74a, #ff3b61);
   background-size: 400% 400%;
   -webkit-animation: AnimationName 10s ease infinite;
-  -moz-animation: AnimationName 10s ease infinite;
   animation: AnimationName 10s ease infinite; }
 
 @-webkit-keyframes AnimationName {
-  0% {
-    background-position: 0% 94%; }
-  50% {
-    background-position: 100% 7%; }
-  100% {
-    background-position: 0% 94%; } }
-
-@-moz-keyframes AnimationName {
   0% {
     background-position: 0% 94%; }
   50% {
@@ -54,8 +43,11 @@ body {
     background-position: 0% 94%; } }
 
 .container {
+  display: -webkit-box;
   display: flex;
+  -webkit-box-align: center;
   align-items: center;
+  -webkit-box-pack: center;
   justify-content: center;
   min-height: 100vh; }
 
@@ -77,11 +69,11 @@ body {
   border-radius: 1rem;
   justify-items: center;
   row-gap: 1.2rem;
+  -webkit-column-gap: 8rem;
+  -moz-column-gap: 8rem;
   column-gap: 8rem;
   font-size: 2rem;
   color: #2c363f;
-  -webkit-box-shadow: 11px 13px 55px -14px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: 11px 13px 55px -14px rgba(0, 0, 0, 0.75);
   box-shadow: 11px 13px 55px -14px rgba(0, 0, 0, 0.75); }
   .weather__location {
     font-size: 4rem;
@@ -91,11 +83,11 @@ body {
     padding-bottom: 2rem; }
   .weather__date {
     font-size: 2rem;
-    letter-spacing: .2rem;
+    letter-spacing: 0.2rem;
     grid-row: 2/3;
     font-weight: 700;
     color: white;
-    padding: .5rem 2rem .5rem 2rem;
+    padding: 0.5rem 2rem 0.5rem 2rem;
     border-radius: 3rem; }
     .weather__date--0 {
       background-color: #00abbc; }
@@ -119,3 +111,29 @@ body {
     font-size: 1.6rem;
     font-weight: 700;
     grid-row: 6/7; }
+
+@media screen and (max-width: 66.25em) {
+  html {
+    font-size: 50%; }
+  .container {
+    padding: 5rem; } }
+
+@media screen and (max-width: 50em) {
+  .weather {
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+    -webkit-box-align: center;
+    align-items: center; }
+    .weather__location {
+      text-align: center; }
+    .weather__date {
+      width: 100%;
+      text-align: center; }
+    .weather__icon {
+      width: 35%;
+      height: 35%; }
+    .weather__temp__minmax {
+      margin-bottom: 5rem; } }
