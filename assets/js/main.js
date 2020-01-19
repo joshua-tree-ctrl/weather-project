@@ -1,3 +1,10 @@
+//Rounding temperature function
+tempRound = (temp) => {
+  return Math.round(temp);
+ };
+ 
+ 
+ 
  //Ajax location function 
 ajaxLocation = () => {
   return $.ajax({
@@ -10,7 +17,7 @@ ajaxLocation = () => {
    // console.log(location);
   //  },
     beforeSend: function() {
-        //console.log("loading");
+        console.log("loading");
         },
         error: function() {
           alert("There was an error getting location data.");
@@ -20,38 +27,85 @@ ajaxLocation = () => {
 
 
 //jQuery Promise, when ajaxLocation() is done, pass results of ajaxLocation() to location parameter 
-weatherFunc = () => {
 $.when(ajaxLocation()).done(function(location) {
 //Use ajaxLocation function results stored in location to provide location to URL string for weather API call
-$.ajax({
+ $.ajax({
   type: "GET",
   url:"https://api.weatherbit.io/v2.0/forecast/daily?city="+location.city+","+location.country_code+"&days=4&key=959dca19c5aa40b084f4991fa3a58145",
   //url:"https://api.weatherbit.io/v2.0/forecast/daily?city=London,GB&days=3&key=959dca19c5aa40b084f4991fa3a58145",
   success: function(weather) {
- // console.log(weather);
+  
+    
+    //FUNCTION 
+    loggedWeatherData = () => {
+      //DATE FORMATTING OPTIONS
+      let options = {  month: 'numeric', day: 'numeric' };
+      
+      //DECLARING AND CREATING KEY/VALUE PAIRS.
+      let weatherObject = {};
+      weatherObject['city'] = weather.city_name;
+      weatherObject['code'] = weather.country_code;
+      weatherObject['data'] = weather.data;
+      weatherObject['time'] = weather.timezone;
+  
+      
+      //LOCATION DISPLAY
+        $('.weather__location').append("Area: " + weatherObject.city + ", " + weatherObject.code);
+       
+  
+      //LOOPING WEATHER DATA FOR 4 DAYS 
+      for (let i = 0; i < weatherObject.data.length; i++) {
+  
+      //DATE FORMATTING
+      let weatherDate = weatherObject.data[i].valid_date;
+      let dateParse = new Date(weatherDate);
+      let dateFormatted = dateParse.toLocaleDateString("en-US", options); 
+      
+  
+        //DATE LOOP 
+        $('.weather__date').append('<div class="weather__date--' + i + '"> Dates:    ' + dateFormatted + '       </div>');
+        //ICON LOOP
+        $('.weather__icon').append('<img class="weather__icon--' + i + '" src="https://www.weatherbit.io/static/img/icons/' + weatherObject.data[i].weather.icon + '.png\" alt=\"weather icon\" ></img>'); 
+        //DESC LOOP 
+        $('.weather__desc').append('<div class="weather__desc--' + i +'">  Descriptions:  ' + weatherObject.data[i].weather.description + '</div>');
+        //TEMP LOOP 
+        $('.weather__temp').append('<div class="weather__temp--' + i +'">  Temps:  ' +  tempRound(weatherObject.data[i].temp) + '</div>');  
+        //HIGH TEMP LOOP
+        $('.weather__high').append('<div class="weather__temp__high--' + i +'">  Highs Of :   ' + tempRound(weatherObject.data[i].max_temp) + '</div>');  
+        //LOW TEMP LOOP
+        $('.weather__low').append('<div class="weather__temp__high--' + i +'"> Lows Of   : ' + tempRound(weatherObject.data[i].min_temp) + '</div>');  
+          } 
+        return weatherObject; 
+      };
+  
+      loggedWeatherData();
+
+
+
+
+
+
+
+
+
+
+
    }, 
   beforeSend: function() {
- // console.log("loading");
+  console.log("loading");
   },
   error: function() {
     alert("There was an error getting weather data.");
   }
-});
-});
-}
-
-
-
-$.when(weatherFunc()).done(function(weather) {
-
-  console.log(weather);
+}); 
 
 });
 
-//ROUNDING TEMP FUNCTION
-tempRound = (temp) => {
-  return Math.round(temp);
- };
+
+
+
+
+
 
 
 
