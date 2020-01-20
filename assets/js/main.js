@@ -1,3 +1,30 @@
+
+/*
+NOT NEEDED????
+requirejs.config({
+  //By default load any module IDs from js/lib
+  baseUrl: 'assets/js',
+  //except, if the module ID starts with "app",
+  //load it from the js/app directory. paths
+  //config is relative to the baseUrl, and
+  //never includes a ".js" extension since
+  //the paths config could be for a directory.
+  
+}); */
+
+// require js file included in assets/js
+requirejs(['jquery'],
+function   ($) {
+  //jQuery loaded and can be used here now.
+
+// Your jQuery Code
+//Create base divs
+$('head').append('<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700,800,900&display=swap" rel="stylesheet">');
+$('head').append('  <link rel="stylesheet" href="assets/css/style.css">');
+$('body').append('<div class="container">  </div>');
+$('.container').append('<div class="weather">  </div>');
+
+
 ///////////////////////////////// AJAX ///////////////////////////////// 
 
 //Callback function, AJAX Calls (.then chaining)
@@ -55,9 +82,6 @@ function ajaxCalls(handleData) {
 //Use ajax callback data to build UI
 ajaxCalls(function(weather){
 
-//Create base divs
-$('body').append('<div class="container">  </div>');
-$('.container').append('<div class="weather">  </div>');
 
 //Rounding temperature function
 tempRound = temp => {
@@ -140,3 +164,8 @@ $(".weather").append(
 });
 
 //////////////////////////////////////////////////////////////////////// 
+
+
+  
+});
+

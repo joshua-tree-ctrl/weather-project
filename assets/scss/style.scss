@@ -88,7 +88,7 @@ body {
   grid-column: 1/5;
   justify-self: center;
   align-self: center;
-  margin: -3rem -5rem -5rem -5rem;
+  margin: -2rem -5rem -5rem -5rem;
 }
 
 .weather {
@@ -202,13 +202,16 @@ body {
     }
 
     &__icon {
-      width: 35%;
-      height: 35%;
+      width: 40%; 
     }
 
     &__temp__minmax {
       margin-bottom: 5rem;
     }
+  }
+
+  .loading {
+    margin-top:.1rem;   
   }
 }
 
