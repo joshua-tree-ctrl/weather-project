@@ -35,6 +35,7 @@ $.when(ajaxLocation()).done(function (location) {
       "&days=4&key=959dca19c5aa40b084f4991fa3a58145",
     //url:"https://api.weatherbit.io/v2.0/forecast/daily?city=London,GB&days=3&key=959dca19c5aa40b084f4991fa3a58145",
     success: function (weather) {
+    //console.log(weather); 
       $('.weather').children('.loading').remove();
       //FUNCTION
       loggedWeatherData = () => {
