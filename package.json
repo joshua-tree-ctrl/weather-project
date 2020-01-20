@@ -1,7 +1,7 @@
 {
   "name": "weather-project",
   "version": "1.0.0",
-  "description": "weather project using openweathermap api",
+  "description": "weather project using weatherbit and geolocate api",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

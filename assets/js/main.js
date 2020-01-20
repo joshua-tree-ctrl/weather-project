@@ -1,3 +1,7 @@
+//Creating divs
+$('body').append('<div class="container">  </div>');
+$('.container').append('<div class="weather">  </div>');
+
 //Rounding temperature function
 tempRound = temp => {
   return Math.round(temp);
