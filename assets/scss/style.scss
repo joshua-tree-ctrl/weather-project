@@ -109,7 +109,6 @@ body {
   color: $grey;
   box-shadow: 11px 13px 55px -14px rgba(0, 0, 0, 0.75);
 
-
   &__location {
     font-size: 4rem;
     font-weight: 900;
@@ -127,7 +126,6 @@ body {
     padding: 0.5rem 2rem 0.5rem 2rem;
     border-radius: 3rem;
     
-
     &--0 {
       background-color: $blue;
     }
@@ -170,7 +168,6 @@ body {
 
 //1060px
 @media screen and (max-width: 66.25em) {
-
       html {
     font-size: 50%;
   }
@@ -178,7 +175,6 @@ body {
   .container {
     padding: 5rem;
   }
-
 }
 
 //800px
@@ -209,7 +205,6 @@ body {
       margin-bottom: 5rem;
     }
   }
-
   .loading {
     margin-top:.1rem;   
   }

@@ -1,32 +1,15 @@
-
-/*
-NOT NEEDED????
-requirejs.config({
-  //By default load any module IDs from js/lib
-  baseUrl: 'assets/js',
-  //except, if the module ID starts with "app",
-  //load it from the js/app directory. paths
-  //config is relative to the baseUrl, and
-  //never includes a ".js" extension since
-  //the paths config could be for a directory.
-  
-}); */
-
 // require js file included in assets/js
 requirejs(['jquery'],
 function   ($) {
-  //jQuery loaded and can be used here now.
+//jQuery loaded and can be used here now.
 
-// Your jQuery Code
-//Create base divs
+///////////////////////////////// BASE DIVS ///////////////////////////////// 
 $('head').append('<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700,800,900&display=swap" rel="stylesheet">');
 $('head').append('  <link rel="stylesheet" href="assets/css/style.css">');
 $('body').append('<div class="container">  </div>');
 $('.container').append('<div class="weather">  </div>');
 
-
 ///////////////////////////////// AJAX ///////////////////////////////// 
-
 //Callback function, AJAX Calls (.then chaining)
 function ajaxCalls(handleData) {
   $.ajax({
@@ -34,9 +17,6 @@ function ajaxCalls(handleData) {
     url: "https://geolocation-db.com/jsonp/0f761a30-fe14-11e9-b59f-e53803842572 ",
     jsonpCallback: "callback",
     dataType: "jsonp",
-   // success: function (weather) {
-        //console.log(weather);
-   // },
     beforeSend: function () {
       console.log("loading");
     },
@@ -67,23 +47,11 @@ function ajaxCalls(handleData) {
   });
 }
 
-///////////////////////////////////////////////////////////////////////////// 
-
-
-
-
-
-
-
-
-
 ///////////////////////////////// UI BUILD ///////////////////////////////// 
-
 //Use ajax callback data to build UI
 ajaxCalls(function(weather){
 
-
-//Rounding temperature function
+  //Rounding temperature function
 tempRound = temp => {
   return Math.round(temp);
 };
@@ -159,13 +127,6 @@ $(".weather").append(
       "</div>"
     );
   }
-  //return object from func
- // return weatherObject; //doesnt seem to be needed?
 });
-
-//////////////////////////////////////////////////////////////////////// 
-
-
-  
 });
 
