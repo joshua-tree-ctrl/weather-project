@@ -16,9 +16,8 @@ $('.container').append('<div class="weather">  </div>');
 
 let getLocation =  $.ajax({
   type: "GET",
-  url: "https://geolocation-db.com/jsonp/0f761a30-fe14-11e9-b59f-e53803842572 ",
-  jsonpCallback: "callback",
-  dataType: "jsonp"
+  url: "https://geolocation-db.com/json/0f761a30-fe14-11e9-b59f-e53803842572 ",
+  dataType:'json'
 });
 
 //Using THEN().. Pass any parameter into the function of the then() to return the data from the getLocation (1st call) ajax call variable. 
