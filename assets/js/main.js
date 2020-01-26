@@ -1,5 +1,3 @@
-"use strict";
-
 // require js file included in assets/js
 requirejs(['jquery'],
 function   ($) {
@@ -12,6 +10,10 @@ $('body').append('<div class="container">  </div>');
 $('.container').append('<div class="weather">  </div>');
 
 ///////////////////////////////// AJAX ///////////////////////////////// 
+
+//First variable of getLocation is an AJAX call (promises built in ajax via jquery instead of writing new Promise in vanilla)
+//This data is then used on the ajax call variable getWeather. 
+
 let getLocation =  $.ajax({
   type: "GET",
   url: "https://geolocation-db.com/jsonp/0f761a30-fe14-11e9-b59f-e53803842572 ",
@@ -19,9 +21,8 @@ let getLocation =  $.ajax({
   dataType: "jsonp"
 });
 
-
-//First function returns data from the call, this is then passed into the THEN() - regardless what parameter name you place in this function as long as its inside THEN() it will return the data from the first call. You need return as you need to return the promise. Promises are natively built into the ajax handler of jquery (like a prototype method).  Removed as function - just use as variables. They're AJAX so they're asynchronous, so don't need to be called as a function and it makes the syntax easier. 
-
+//Using THEN().. Pass any parameter into the function of the then() to return the data from the getLocation (1st call) ajax call variable. 
+//let getWeather = getLocation.then() function, which will return the weather (2nd ajax call) utilising data from the first ajax call (chained). 
 let getWeather = getLocation.then(function(location) {
   return $.ajax({
     type: "GET",
@@ -41,141 +42,28 @@ let getWeather = getLocation.then(function(location) {
   });
 }); 
 
-getLocation.fail(function(){alert("There was an error getting location and weather data.");});
+//Fail 
 getWeather.fail(function(){alert("There was an error getting weather data.");});
 
-getWeather.done(function(weather){
+//Passed results from getWeather into parameter 'weather' via done(). 
+//Use ajax promise.done data to build UI
+getWeather.done(function(weatherData){
  
 ///////////////////////////////// UI BUILD ///////////////////////////////// 
-//Use ajax promise.done data to build UI
-console.log(weather);
-//Rounding temperature function
-let tempRound = temp => {
-  return Math.round(temp);
-};
-
-//Date formatting//
- let options = {
-    month: "numeric",
-    day: "numeric"
-  };
 
 //Declare object, create key/value pairs for tidier implementation of data results from api
-  let weatherObject = {};
-  weatherObject["city"] = weather.city_name;
-  weatherObject["code"] = weather.country_code;
-  weatherObject["data"] = weather.data;
-  weatherObject["time"] = weather.timezone;
+  let weather = {};
+  weather["city"] = weatherData.city_name;
+  weather["code"] = weatherData.country_code;
+  weather["data"] = weatherData.data;
+  weather["time"] = weatherData.timezone;
 
  //Display Location
 $(".weather").append(
-  '<div class="weather__location" > ' + weatherObject.city + ", " + weatherObject.code  + '</div>'
+  '<div class="weather__location" > ' + weather.city + ", " + weather.code  + '</div>'
  );
 
-  //Loop object to display 4 days of weather data. 
-  for (let i = 0; i < weatherObject.data.length; i++) {
-    
-    //Format date for each date looped
-    let weatherDate = weatherObject.data[i].valid_date;
-    let dateParse = new Date(weatherDate);
-    let dateFormatted = dateParse.toLocaleDateString("en-GB", options);
-
-    //Display formatted date
-    $(".weather").append(
-      '<div class="weather__date weather__date--' +
-      i +
-      '">  ' +
-      dateFormatted +
-      "       </div>"
-    );
-
-    //Icon
-    $(".weather").append(
-      '<img class="weather__icon weather__icon--' +
-      i +
-      '" src="https://www.weatherbit.io/static/img/icons/' +
-      weatherObject.data[i].weather.icon +
-      '.png" alt="weather icon" ></img>'
-    );
-   
-    //Weather Descrip 
-    $(".weather").append(
-      '<div class="weather__desc weather__desc--' +
-      i +
-      '"> ' +
-      weatherObject.data[i].weather.description +
-      "</div>"
-    );
-
-    //Temp
-    $(".weather").append(
-      '<div class="weather__temp weather__temp--' +
-      i +
-      '"> ' +
-      tempRound(weatherObject.data[i].temp) + "&#176;" +
-      "</div>"
-    );
-
-    //MinMax temp
-    $(".weather").append(
-      '<div class="weather__temp__minmax weather__temp__minmax--' +
-      i +
-      '">   H: ' +
-      tempRound(weatherObject.data[i].max_temp) + "&#176;" +  " L: " + tempRound(weatherObject.data[i].min_temp) + "&#176;" +
-      "</div>"
-    );
-  }
-});
-
-
-
-//before i used callbacks and promises - whereas now I've just used promises
-
-
-
-/* 
-//Callback function, AJAX Calls (.then chaining)
-function ajaxCalls(handleData) {
-  $.ajax({
-    type: "GET",
-    url: "https://geolocation-db.com/jsonp/0f761a30-fe14-11e9-b59f-e53803842572 ",
-    jsonpCallback: "callback",
-    dataType: "jsonp",
-    beforeSend: function () {
-      console.log("loading");
-    },
-    error: function () {
-      alert("There was an error getting location data.");
-    }
-  }).then(function(location) { //then use 1st ajax data for 2nd call
-    return $.ajax({
-        type: "GET",
-        url: "https://api.weatherbit.io/v2.0/forecast/daily?city=" +
-          location.city +
-          "," +
-          location.country_code +
-          "&days=4&key=959dca19c5aa40b084f4991fa3a58145",
-        success: function (weather) {
-        handleData(weather); //callback
-          $('.weather').children('.loading').remove();
-        },
-        beforeSend: function () {
-          $(".weather").prepend(
-            '<div class="loading"><img src="assets/img/ajax-loader-weather.gif" alt="Loading" /></div>'
-          );
-        },
-        error: function () {
-          alert("There was an error getting weather data.");
-        }
-      });
-  });
-}
-
-///////////////////////////////// UI BUILD ///////////////////////////////// 
-//Use ajax callback data to build UI
-ajaxCalls(function(weather){
-
-  //Rounding temperature function
+ //Rounding temperature function
 tempRound = temp => {
   return Math.round(temp);
 };
@@ -186,23 +74,11 @@ tempRound = temp => {
     day: "numeric"
   };
 
-//Declare object, create key/value pairs for tidier implementation of data results from api
-  let weatherObject = {};
-  weatherObject["city"] = weather.city_name;
-  weatherObject["code"] = weather.country_code;
-  weatherObject["data"] = weather.data;
-  weatherObject["time"] = weather.timezone;
-
- //Display Location
-$(".weather").append(
-  '<div class="weather__location" > ' + weatherObject.city + ", " + weatherObject.code  + '</div>'
- );
-
   //Loop object to display 4 days of weather data. 
-  for (let i = 0; i < weatherObject.data.length; i++) {
+  for (let i = 0; i < weather.data.length; i++) {
     
     //Format date for each date looped
-    let weatherDate = weatherObject.data[i].valid_date;
+    let weatherDate = weather.data[i].valid_date;
     let dateParse = new Date(weatherDate);
     let dateFormatted = dateParse.toLocaleDateString("en-GB", options);
 
@@ -220,7 +96,7 @@ $(".weather").append(
       '<img class="weather__icon weather__icon--' +
       i +
       '" src="https://www.weatherbit.io/static/img/icons/' +
-      weatherObject.data[i].weather.icon +
+      weather.data[i].weather.icon +
       '.png" alt="weather icon" ></img>'
     );
    
@@ -229,7 +105,7 @@ $(".weather").append(
       '<div class="weather__desc weather__desc--' +
       i +
       '"> ' +
-      weatherObject.data[i].weather.description +
+      weather.data[i].weather.description +
       "</div>"
     );
 
@@ -238,7 +114,7 @@ $(".weather").append(
       '<div class="weather__temp weather__temp--' +
       i +
       '"> ' +
-      tempRound(weatherObject.data[i].temp) + "&#176;" +
+      tempRound(weather.data[i].temp) + "&#176;" +
       "</div>"
     );
 
@@ -247,12 +123,12 @@ $(".weather").append(
       '<div class="weather__temp__minmax weather__temp__minmax--' +
       i +
       '">   H: ' +
-      tempRound(weatherObject.data[i].max_temp) + "&#176;" +  " L: " + tempRound(weatherObject.data[i].min_temp) + "&#176;" +
+      tempRound(weather.data[i].max_temp) + "&#176;" +  " L: " + tempRound(weather.data[i].min_temp) + "&#176;" +
       "</div>"
     );
   }
 });
-*/
+
 });
 
  
