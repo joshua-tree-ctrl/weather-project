@@ -59,7 +59,7 @@ getWeather.done(function(weatherData){
 
  //Display Location
 $(".weather").append(
-  '<div class="weather__location" > ' + weather.city + ", " + weather.code  + '</div>'
+  `<div class="weather__location"> ${weather.city}, ${weather.code} </div>` 
  );
 
  //Rounding temperature function
@@ -83,47 +83,25 @@ tempRound = temp => {
 
     //Display formatted date
     $(".weather").append(
-      '<div class="weather__date weather__date--' +
-      i +
-      '">  ' +
-      dateFormatted +
-      "       </div>"
+      `<div class="weather__date weather__date--${i}"> ${dateFormatted}  </div>`
     );
 
     //Icon
     $(".weather").append(
-      '<img class="weather__icon weather__icon--' +
-      i +
-      '" src="https://www.weatherbit.io/static/img/icons/' +
-      weather.data[i].weather.icon +
-      '.png" alt="weather icon" ></img>'
+      `<img class="weather__icon weather__icon--${i}" src="https://www.weatherbit.io/static/img/icons/${weather.data[i].weather.icon}.png" alt="weather icon" ></img>`
     );
    
     //Weather Descrip 
-    $(".weather").append(
-      '<div class="weather__desc weather__desc--' +
-      i +
-      '"> ' +
-      weather.data[i].weather.description +
-      "</div>"
+    $(".weather").append(`<div class="weather__desc weather__desc--${i}">  ${weather.data[i].weather.description} </div>`
     );
 
     //Temp
     $(".weather").append(
-      '<div class="weather__temp weather__temp--' +
-      i +
-      '"> ' +
-      tempRound(weather.data[i].temp) + "&#176;" +
-      "</div>"
+      `<div class="weather__temp weather__temp--${i}"> ${tempRound(weather.data[i].temp)}&#176; </div>`
     );
 
     //MinMax temp
-    $(".weather").append(
-      '<div class="weather__temp__minmax weather__temp__minmax--' +
-      i +
-      '">   H: ' +
-      tempRound(weather.data[i].max_temp) + "&#176;" +  " L: " + tempRound(weather.data[i].min_temp) + "&#176;" +
-      "</div>"
+    $(".weather").append(`<div class="weather__temp__minmax weather__temp__minmax--${i}">   H: ${tempRound(weather.data[i].max_temp)}&#176; L:${tempRound(weather.data[i].min_temp)} &#176; </div>`
     );
   }
 });
