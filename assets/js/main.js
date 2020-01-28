@@ -25,11 +25,7 @@ let getLocation =  $.ajax({
 let getWeather = getLocation.then(function(location) {
   return $.ajax({
     type: "GET",
-    url: "https://api.weatherbit.io/v2.0/forecast/daily?city=" +
-      location.city +
-      "," +
-      location.country_code +
-      "&days=4&key=959dca19c5aa40b084f4991fa3a58145",
+    url: `https://api.weatherbit.io/v2.0/forecast/daily?city=${location.city},${location.country_code}&days=4&key=959dca19c5aa40b084f4991fa3a58145`,
     success: function () {
       $('.weather').children('.loading').remove();
     },
@@ -47,15 +43,18 @@ getWeather.fail(function(){alert("There was an error getting weather data.");});
 //Passed results from getWeather into parameter 'weather' via done(). 
 //Use ajax promise.done data to build UI
 getWeather.done(function(weatherData){
+ //console.log(weatherData);
+
+
+
+
+
  
 ///////////////////////////////// UI BUILD ///////////////////////////////// 
 
-//Declare object, create key/value pairs for tidier implementation of data results from api
-  let weather = {};
-  weather["city"] = weatherData.city_name;
-  weather["code"] = weatherData.country_code;
-  weather["data"] = weatherData.data;
-  weather["time"] = weatherData.timezone;
+// Object destructuring assignment
+let {city_name:city, country_code:code, data,timezone:time, ...rest} = weatherData;
+let weather = {city,code,data,time};
 
  //Display Location
 $(".weather").append(
@@ -67,7 +66,7 @@ tempRound = temp => {
   return Math.round(temp);
 };
 
-//Date formatting//
+//Date formatting
  let options = {
     month: "numeric",
     day: "numeric"
