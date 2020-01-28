@@ -43,12 +43,6 @@ getWeather.fail(function(){alert("There was an error getting weather data.");});
 //Passed results from getWeather into parameter 'weather' via done(). 
 //Use ajax promise.done data to build UI
 getWeather.done(function(weatherData){
- //console.log(weatherData);
-
-
-
-
-
  
 ///////////////////////////////// UI BUILD ///////////////////////////////// 
 
