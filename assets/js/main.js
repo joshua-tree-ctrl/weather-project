@@ -42,28 +42,23 @@ getWeather.fail(function(){alert("There was an error getting weather data.");});
 
 //Passed results from getWeather into parameter 'weather' via done(). 
 //Use ajax promise.done data to build UI
-getWeather.done(function(weatherData){
- 
+getWeather.done(function(promiseDone){
+
 ///////////////////////////////// UI BUILD ///////////////////////////////// 
 
 // Object destructuring assignment
-let {city_name:city, country_code:code, data, timezone:time, ...rest} = weatherData;
+let {city_name:city, country_code:code, data, timezone:time, ...rest} = promiseDone; //Pulling data required and assigning to new keys
+//Mapping just the data key properties
 let weatherInfo = data.map(({temp, max_temp, min_temp, weather, valid_date}) => ({temp, max_temp, min_temp, weather, valid_date})); 
 
 
 
-console.log(weatherInfo);
-
-for (const x of weatherInfo) {
-    console.log(x.temp, x.weather.description);
-}
-
- //Display Location
+//Display Location
 $(".weather").append(
   `<div class="weather__location"> ${city}, ${code} </div>` 
  );
 
- //Rounding temperature function
+//Rounding temperature function
 tempRound = temp => {
   return Math.round(temp);
 };
@@ -74,35 +69,45 @@ tempRound = temp => {
     day: "numeric"
   };
 
-  //Loop object to display 4 days of weather data. 
-  for (let i = 0; i < data.length; i++) {
-    
+//Loop object with es6 for-of to display 4 days of weather data. 
+
+// Array keys for CSS
+/* let keyNumbers = weatherInfo.keys();
+for (k of keyNumbers) {
+  $(".weather").append(
+    `<div class="weather__date weather__date--${k}">  </div>`
+  );
+} */ 
+
+for (const w of weatherInfo) {
+    console.log(w);
+  
     //Format date for each date looped
-    let weatherDate = data[i].valid_date;
+    let weatherDate = w.valid_date;
     let dateParse = new Date(weatherDate);
     let dateFormatted = dateParse.toLocaleDateString("en-GB", options);
 
     //Display formatted date
     $(".weather").append(
-      `<div class="weather__date weather__date--${i}"> ${dateFormatted}  </div>`
+      `<div class="weather__date"> ${dateFormatted}  </div>`
     );
 
     //Icon
     $(".weather").append(
-      `<img class="weather__icon weather__icon--${i}" src="https://www.weatherbit.io/static/img/icons/${data[i].weather.icon}.png" alt="weather icon" ></img>`
+      `<img class="weather__icon" src="https://www.weatherbit.io/static/img/icons/${w.weather.icon}.png" alt="weather icon" ></img>`
     );
    
     //Weather Descrip 
-    $(".weather").append(`<div class="weather__desc weather__desc--${i}">  ${data[i].weather.description} </div>`
+    $(".weather").append(`<div class="weather__desc">  ${w.weather.description} </div>`
     );
 
     //Temp
     $(".weather").append(
-      `<div class="weather__temp weather__temp--${i}"> ${tempRound(data[i].temp)}&#176; </div>`
+      `<div class="weather__temp"> ${tempRound(w.temp)}&#176; </div>`
     );
 
     //MinMax temp
-    $(".weather").append(`<div class="weather__temp__minmax weather__temp__minmax--${i}">   H: ${tempRound(data[i].max_temp)}&#176; L:${tempRound(data[i].min_temp)} &#176; </div>`
+    $(".weather").append(`<div class="weather__temp__minmax">   H: ${tempRound(w.max_temp)}&#176; L:${tempRound(w.min_temp)} &#176; </div>`
     );
   }
 });

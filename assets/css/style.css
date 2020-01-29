@@ -88,15 +88,8 @@ body {
     font-weight: 700;
     color: white;
     padding: 0.5rem 2rem 0.5rem 2rem;
-    border-radius: 3rem; }
-    .weather__date--0 {
-      background-color: #00abbc; }
-    .weather__date--1 {
-      background-color: #b35d7f; }
-    .weather__date--2 {
-      background-color: #27659a; }
-    .weather__date--3 {
-      background-color: #d67e8f; }
+    border-radius: 3rem;
+    background-color: #00abbc; }
   .weather__icon {
     grid-row: 3/4; }
   .weather__desc {

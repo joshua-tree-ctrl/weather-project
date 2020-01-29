@@ -125,22 +125,8 @@ body {
     color: white;
     padding: 0.5rem 2rem 0.5rem 2rem;
     border-radius: 3rem;
+    background-color: $blue;
     
-    &--0 {
-      background-color: $blue;
-    }
-
-    &--1 {
-      background-color: $rose;
-    }
-
-    &--2 {
-      background-color: $lapblue;
-    }
-
-    &--3 {
-      background-color: $blush;
-    }
   }
 
   &__icon {
