@@ -47,12 +47,22 @@ getWeather.done(function(weatherData){
 ///////////////////////////////// UI BUILD ///////////////////////////////// 
 
 // Object destructuring assignment
-let {city_name:city, country_code:code, data,timezone:time, ...rest} = weatherData;
-let weather = {city,code,data,time};
+let {city_name:city, country_code:code, data, timezone:time, ...rest} = weatherData;
+//let weather = {city,code,data,time};
+console.log(data);
+
+l//et chosenData = data.map(({temp, max_temp, min_temp, weather, valid_date}) => ({temp, max_temp, min_temp, weather, valid_date}));
+
+
+//var officersIds = officers.map(function (officer) {
+ // return officer.id
+//});
+
+//console.log(chosenData);
 
  //Display Location
 $(".weather").append(
-  `<div class="weather__location"> ${weather.city}, ${weather.code} </div>` 
+  `<div class="weather__location"> ${city}, ${code} </div>` 
  );
 
  //Rounding temperature function
@@ -67,10 +77,10 @@ tempRound = temp => {
   };
 
   //Loop object to display 4 days of weather data. 
-  for (let i = 0; i < weather.data.length; i++) {
+  for (let i = 0; i < data.length; i++) {
     
     //Format date for each date looped
-    let weatherDate = weather.data[i].valid_date;
+    let weatherDate = data[i].valid_date;
     let dateParse = new Date(weatherDate);
     let dateFormatted = dateParse.toLocaleDateString("en-GB", options);
 
@@ -81,20 +91,20 @@ tempRound = temp => {
 
     //Icon
     $(".weather").append(
-      `<img class="weather__icon weather__icon--${i}" src="https://www.weatherbit.io/static/img/icons/${weather.data[i].weather.icon}.png" alt="weather icon" ></img>`
+      `<img class="weather__icon weather__icon--${i}" src="https://www.weatherbit.io/static/img/icons/${data[i].weather.icon}.png" alt="weather icon" ></img>`
     );
    
     //Weather Descrip 
-    $(".weather").append(`<div class="weather__desc weather__desc--${i}">  ${weather.data[i].weather.description} </div>`
+    $(".weather").append(`<div class="weather__desc weather__desc--${i}">  ${data[i].weather.description} </div>`
     );
 
     //Temp
     $(".weather").append(
-      `<div class="weather__temp weather__temp--${i}"> ${tempRound(weather.data[i].temp)}&#176; </div>`
+      `<div class="weather__temp weather__temp--${i}"> ${tempRound(data[i].temp)}&#176; </div>`
     );
 
     //MinMax temp
-    $(".weather").append(`<div class="weather__temp__minmax weather__temp__minmax--${i}">   H: ${tempRound(weather.data[i].max_temp)}&#176; L:${tempRound(weather.data[i].min_temp)} &#176; </div>`
+    $(".weather").append(`<div class="weather__temp__minmax weather__temp__minmax--${i}">   H: ${tempRound(data[i].max_temp)}&#176; L:${tempRound(data[i].min_temp)} &#176; </div>`
     );
   }
 });

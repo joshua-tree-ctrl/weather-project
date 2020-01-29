@@ -101,7 +101,8 @@ body {
     grid-row: 3/4; }
   .weather__desc {
     font-weight: 700;
-    grid-row: 4/5; }
+    grid-row: 4/5;
+    text-align: center; }
   .weather__temp {
     font-size: 5rem;
     font-weight: 900;
