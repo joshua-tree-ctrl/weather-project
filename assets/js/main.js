@@ -48,17 +48,15 @@ getWeather.done(function(weatherData){
 
 // Object destructuring assignment
 let {city_name:city, country_code:code, data, timezone:time, ...rest} = weatherData;
-//let weather = {city,code,data,time};
-console.log(data);
-
-l//et chosenData = data.map(({temp, max_temp, min_temp, weather, valid_date}) => ({temp, max_temp, min_temp, weather, valid_date}));
+let weatherInfo = data.map(({temp, max_temp, min_temp, weather, valid_date}) => ({temp, max_temp, min_temp, weather, valid_date})); 
 
 
-//var officersIds = officers.map(function (officer) {
- // return officer.id
-//});
 
-//console.log(chosenData);
+console.log(weatherInfo);
+
+for (const x of weatherInfo) {
+    console.log(x.temp, x.weather.description);
+}
 
  //Display Location
 $(".weather").append(
