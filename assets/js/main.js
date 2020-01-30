@@ -43,14 +43,22 @@ getWeather.fail(function(){alert("There was an error getting weather data.");});
 //Passed results from getWeather into parameter 'weather' via done(). 
 //Use ajax promise.done data to build UI
 getWeather.done(function(promiseDone){
-
+console.log(promiseDone); // It first starts as an Object with a data key that contains 4 arrays as a property, amongst other keys/properties. 
 ///////////////////////////////// UI BUILD ///////////////////////////////// 
 
-// Object destructuring assignment
-let {city_name:city, country_code:code, data, timezone:time, ...rest} = promiseDone; //Pulling data required and assigning to new keys
-//Mapping just the data key properties
-let weatherInfo = data.map(({temp, max_temp, min_temp, weather, valid_date}) => ({temp, max_temp, min_temp, weather, valid_date})); 
 
+// Object destructuring assignment
+let {city_name:city, country_code:code, data, timezone:time, ...rest} = promiseDone; 
+console.log(data); //Then object destructuring occurs which pulls the required keys and places them into their own variables. You dont need to loop city, code, timezone.
+//You place data (the key with a 4 property array, which contain an object in each array point) into its own variable. 
+
+//As destructuring is not a loop but simply extracting chosen key/properties, you could not then unpack each object key/property at each point in the 4 array, you'd only end up removing array keys like [0] or [2]. 
+//You couldn't object destructure as above either, as it is not an object yet, its an array. 
+
+//Instead we use map() on data
+//Must wrap the returning object literal into parentheses. Otherwise curly braces will be considered to denote the function’s body. The following works:
+let weatherInfo = data.map(({temp, max_temp, min_temp, weather, valid_date}) => ({temp, max_temp, min_temp, weather, valid_date})); 
+console.log(weatherInfo); // Map takes an array  and creates a new array with the object keys/properties required 
 
 
 //Display Location
@@ -71,16 +79,8 @@ tempRound = temp => {
 
 //Loop object with es6 for-of to display 4 days of weather data. 
 
-// Array keys for CSS
-/* let keyNumbers = weatherInfo.keys();
-for (k of keyNumbers) {
-  $(".weather").append(
-    `<div class="weather__date weather__date--${k}">  </div>`
-  );
-} */ 
-
 for (const w of weatherInfo) {
-    console.log(w);
+   
   
     //Format date for each date looped
     let weatherDate = w.valid_date;
