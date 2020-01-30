@@ -43,13 +43,13 @@ getWeather.fail(()=>{alert("There was an error getting weather data.");});
 //Passed results from getWeather into parameter 'weather' via done(). 
 //Use ajax promise.done data to build UI
 getWeather.done((promiseDone) => {
-console.log(promiseDone); // It first starts as an Object with a data key that contains 4 arrays as a property, amongst other keys/properties. 
+//console.log(promiseDone); // It first starts as an Object with a data key that contains 4 arrays as a property, amongst other keys/properties. 
 ///////////////////////////////// UI BUILD ///////////////////////////////// 
 
 
 // Object destructuring assignment
 let {city_name:city, country_code:code, data, timezone:time, ...rest} = promiseDone; 
-console.log(data); //Then object destructuring occurs which pulls the required keys and places them into their own variables. You dont need to loop city, code, timezone.
+//console.log(data); //Then object destructuring occurs which pulls the required keys and places them into their own variables. You dont need to loop city, code, timezone.
 //You place data (the key with a 4 property array, which contain an object in each array point) into its own variable. 
 
 //As destructuring is not a loop but simply extracting chosen key/properties, you could not then unpack each object key/property at each point in the 4 array, you'd only end up removing array keys like [0] or [2]. 
@@ -60,7 +60,7 @@ console.log(data); //Then object destructuring occurs which pulls the required k
 let weatherInfo = data.map(({temp, max_temp, min_temp, weather, valid_date}) => ({temp, max_temp, min_temp, weather, valid_date})); 
 //.map() can be used to iterate through objects in an array and in a similar fashion to traditional arrays, *modify the content of each individual object *and return a new array. weatherInfo above says to map the data array containing objects, and to take those key/properties and place only them into new array. 
 // those parameters are the original key/property values, and store only these into weatherInfo. Map takes an array  and creates a new array returning the object keys/properties required 
-console.log(weatherInfo);
+//console.log(weatherInfo);
 
 
 //Display Location
@@ -79,11 +79,10 @@ tempRound = (temp) => {
     day: "numeric"
   };
 
+  
 //Loop object with es6 for-of to display 4 days of weather data. 
-
 for (const w of weatherInfo) {
    
-  
     //Format date for each date looped
     let weatherDate = w.valid_date;
     let dateParse = new Date(weatherDate);
@@ -99,16 +98,16 @@ for (const w of weatherInfo) {
       `<img class="weather__icon" src="https://www.weatherbit.io/static/img/icons/${w.weather.icon}.png" alt="weather icon" ></img>`
     );
    
-    //Weather Descrip 
+    //Weather Description 
     $(".weather").append(`<div class="weather__desc">  ${w.weather.description} </div>`
     );
 
-    //Temp
+    //Temperature
     $(".weather").append(
       `<div class="weather__temp"> ${tempRound(w.temp)}&#176; </div>`
     );
 
-    //MinMax temp
+    //Minimum and maximum temperature 
     $(".weather").append(`<div class="weather__temp__minmax">   H: ${tempRound(w.max_temp)}&#176; L:${tempRound(w.min_temp)} &#176; </div>`
     );
   }
