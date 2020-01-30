@@ -22,14 +22,14 @@ let getLocation =  $.ajax({
 
 //Using THEN().. Pass any parameter into the function of the then() to return the data from the getLocation (1st call) ajax call variable. 
 //let getWeather = getLocation.then() function, which will return the weather (2nd ajax call) utilising data from the first ajax call (chained). 
-let getWeather = getLocation.then(function(location) {
+let getWeather = getLocation.then((location) => {
   return $.ajax({
     type: "GET",
     url: `https://api.weatherbit.io/v2.0/forecast/daily?city=${location.city},${location.country_code}&days=4&key=959dca19c5aa40b084f4991fa3a58145`,
-    success: function () {
+    success: () => {
       $('.weather').children('.loading').remove();
     },
-    beforeSend: function () {
+    beforeSend: () => {
       $(".weather").prepend(
         '<div class="loading"><img src="assets/img/ajax-loader-weather.gif" alt="Loading" /></div>'
       );
@@ -38,11 +38,11 @@ let getWeather = getLocation.then(function(location) {
 }); 
 
 //Fail 
-getWeather.fail(function(){alert("There was an error getting weather data.");});
+getWeather.fail(()=>{alert("There was an error getting weather data.");});
 
 //Passed results from getWeather into parameter 'weather' via done(). 
 //Use ajax promise.done data to build UI
-getWeather.done(function(promiseDone){
+getWeather.done((promiseDone) => {
 console.log(promiseDone); // It first starts as an Object with a data key that contains 4 arrays as a property, amongst other keys/properties. 
 ///////////////////////////////// UI BUILD ///////////////////////////////// 
 
@@ -58,7 +58,9 @@ console.log(data); //Then object destructuring occurs which pulls the required k
 //Instead we use map() on data
 //Must wrap the returning object literal into parentheses. Otherwise curly braces will be considered to denote the function’s body. The following works:
 let weatherInfo = data.map(({temp, max_temp, min_temp, weather, valid_date}) => ({temp, max_temp, min_temp, weather, valid_date})); 
-console.log(weatherInfo); // Map takes an array  and creates a new array returning the object keys/properties required 
+//.map() can be used to iterate through objects in an array and in a similar fashion to traditional arrays, *modify the content of each individual object *and return a new array. weatherInfo above says to map the data array containing objects, and to take those key/properties and place only them into new array. 
+// those parameters are the original key/property values, and store only these into weatherInfo. Map takes an array  and creates a new array returning the object keys/properties required 
+console.log(weatherInfo);
 
 
 //Display Location
@@ -67,7 +69,7 @@ $(".weather").append(
  );
 
 //Rounding temperature function
-tempRound = temp => {
+tempRound = (temp) => {
   return Math.round(temp);
 };
 
