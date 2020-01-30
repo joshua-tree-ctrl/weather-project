@@ -58,7 +58,7 @@ console.log(data); //Then object destructuring occurs which pulls the required k
 //Instead we use map() on data
 //Must wrap the returning object literal into parentheses. Otherwise curly braces will be considered to denote the function’s body. The following works:
 let weatherInfo = data.map(({temp, max_temp, min_temp, weather, valid_date}) => ({temp, max_temp, min_temp, weather, valid_date})); 
-console.log(weatherInfo); // Map takes an array  and creates a new array with the object keys/properties required 
+console.log(weatherInfo); // Map takes an array  and creates a new array returning the object keys/properties required 
 
 
 //Display Location
