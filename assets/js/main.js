@@ -69,7 +69,7 @@ $(".weather").append(
  );
 
 //Rounding temperature function
-tempRound = (temp) => {
+let tempRound = (temp) => {
   return Math.round(temp);
 };
 
@@ -108,7 +108,7 @@ for (const w of weatherInfo) {
     );
 
     //Minimum and maximum temperature 
-    $(".weather").append(`<div class="weather__temp__minmax">   H: ${tempRound(w.max_temp)}&#176; L:${tempRound(w.min_temp)} &#176; </div>`
+    $(".weather").append(`<div class="weather__temp__minmax">   H: ${tempRound(w.max_temp)}&#176; L: ${tempRound(w.min_temp)} &#176; </div>`
     );
   }
 });
