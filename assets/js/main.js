@@ -40,7 +40,7 @@ let getWeather = getLocation.then((location) => {
 //Fail 
 getWeather.fail(()=>{alert("There was an error getting weather data.");});
 
-//Passed results from getWeather into parameter 'weather' via done(). 
+//Passed results from getWeather into parameter 'promiseDone' via done(). 
 //Use ajax promise.done data to build UI
 getWeather.done((promiseDone) => {
 //console.log(promiseDone); // It first starts as an Object with a data key that contains 4 arrays as a property, amongst other keys/properties. 
