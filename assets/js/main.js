@@ -4,9 +4,15 @@ function   ($) {
   
 //jQuery loaded and can be used here now.
 ///////////////////////////////// BASE DIVS ///////////////////////////////// 
+
+let bodyHTML = document.getElementsByTagName("body")[0];
+let Selector = document.querySelector('.container');
+console.log(Selector);
+bodyHTML.innerHTML = '<div class="container"> </div>';
+//containerHTML.innerHTML = "<div class=\"weather\"></div>";
 $('head').append('<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700,800,900&display=swap" rel="stylesheet">');
 $('head').append('  <link rel="stylesheet" href="assets/css/style.css">');
-$('body').append('<div class="container">  </div>');
+//$('body').append('<div class="container">  </div>');
 $('.container').append('<div class="weather">  </div>');
 
 ///////////////////////////////// AJAX ///////////////////////////////// 
@@ -62,10 +68,12 @@ let weatherInfo = data.map(({temp, max_temp, min_temp, weather, valid_date}) => 
 // those parameters are the original key/property values, and store only these into weatherInfo. Map takes an array  and creates a new array returning the object keys/properties required 
 //console.log(weatherInfo);
 
-let weatherClass = document.querySelector(".weather");
+//Select main div.weather 
+let weatherSelector = document.querySelector(".weather");
+
 
 //Display Location
-weatherClass.innerHTML = `<div class="weather__location"> ${city}, ${code} </div>`;
+weatherSelector.innerHTML = `<div class="weather__location"> ${city}, ${code} </div>`;
 
 //Rounding temperature function
 let tempRound = (temp) => {
@@ -79,36 +87,28 @@ let tempRound = (temp) => {
   };
 
   
-//Loop object with es6 for-of to display 4 days of weather data. 
+//Loop array of objects with es6 for-of to display 4 days of weather data. 
 for (const w of weatherInfo) {
-   
+  
     //Format date for each date looped
     let weatherDate = w.valid_date;
     let dateParse = new Date(weatherDate);
     let dateFormatted = dateParse.toLocaleDateString("en-GB", options);
 
     //Display formatted date
-    $(".weather").append(
-      `<div class="weather__date"> ${dateFormatted}  </div>`
-    );
+     weatherSelector.innerHTML += `<div class="weather__date"> ${dateFormatted}  </div>` ;
 
     //Icon
-    $(".weather").append(
-      `<img class="weather__icon" src="https://www.weatherbit.io/static/img/icons/${w.weather.icon}.png" alt="weather icon" ></img>`
-    );
+     weatherSelector.innerHTML += `<img class="weather__icon" src="https://www.weatherbit.io/static/img/icons/${w.weather.icon}.png" alt="weather icon" ></img>` ;
    
     //Weather Description 
-    $(".weather").append(`<div class="weather__desc">  ${w.weather.description} </div>`
-    );
+    weatherSelector.innerHTML += `<div class="weather__desc">  ${w.weather.description} </div>`;
 
     //Temperature
-    $(".weather").append(
-      `<div class="weather__temp"> ${tempRound(w.temp)}&#176; </div>`
-    );
+    weatherSelector.innerHTML +=  `<div class="weather__temp"> ${tempRound(w.temp)}&#176; </div>`;
 
     //Minimum and maximum temperature 
-    $(".weather").append(`<div class="weather__temp__minmax">   H: ${tempRound(w.max_temp)}&#176; L: ${tempRound(w.min_temp)} &#176; </div>`
-    );
+    weatherSelector.innerHTML +=`<div class="weather__temp__minmax">   H: ${tempRound(w.max_temp)}&#176; L: ${tempRound(w.min_temp)} &#176; </div>` ;
   }
 });
 
