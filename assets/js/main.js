@@ -23,11 +23,22 @@ container.innerHTML = '<div class="weather"></div>';
 //First variable of getLocation is an AJAX call (promises built in ajax via jquery instead of writing new Promise in vanilla)
 //This data is then used on the ajax call variable getWeather. 
 
-let getLoc = new XMLHttpRequest();
-getLoc.open("GET", "https://geolocation-db.com/json/0f761a30-fe14-11e9-b59f-e53803842572", true);
-getLoc.responseType ='json';
-getLoc.send();
-console.log(getLoc);
+
+const fetchPromise = fetch("https://geolocation-db.com/json/0f761a30-fe14-11e9-b59f-e53803842572");
+fetchPromise.then(response => {
+  return response.json();
+}).then(function(location){
+  return fetch(`https://api.weatherbit.io/v2.0/forecast/daily?city=${location.city},${location.country_code}&days=4&key=959dca19c5aa40b084f4991fa3a58145`)
+}).then(response => {
+  return response.json();
+}).then(getWeather => {
+  console.log(getWeather);
+  
+// Object destructuring assignment
+let {city_name:city, country_code:code, data, timezone:time, ...rest} = getWeather; 
+console.log(data);
+
+}).catch(error => {alert(error); })
 
 let getLocation =  $.ajax({
   type: "GET",
@@ -38,6 +49,7 @@ let getLocation =  $.ajax({
 //Using THEN().. Pass any parameter into the function of the then() to return the data from the getLocation (1st call) ajax call variable. 
 //let getWeather = getLocation.then() function, which will return the weather (2nd ajax call) utilising data from the first ajax call (chained). 
 let getWeather = getLocation.then((location) => {
+
   return $.ajax({
     type: "GET",
     url: `https://api.weatherbit.io/v2.0/forecast/daily?city=${location.city},${location.country_code}&days=4&key=959dca19c5aa40b084f4991fa3a58145`,
@@ -64,6 +76,7 @@ getWeather.done((promiseDone) => {
 
 // Object destructuring assignment
 let {city_name:city, country_code:code, data, timezone:time, ...rest} = promiseDone; 
+
 //console.log(data); //Then object destructuring occurs which pulls the required keys and places them into their own variables. You dont need to loop city, code, timezone.
 //You place data (the key with a 4 property array, which contain an object in each array point) into its own variable. 
 
