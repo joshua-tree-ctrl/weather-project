@@ -3,22 +3,31 @@ requirejs(['jquery'],
 function   ($) {
   
 //jQuery loaded and can be used here now.
+
 ///////////////////////////////// BASE DIVS ///////////////////////////////// 
 
-let bodyHTML = document.getElementsByTagName("body")[0];
-let Selector = document.querySelector('.container');
-console.log(Selector);
-bodyHTML.innerHTML = '<div class="container"> </div>';
-//containerHTML.innerHTML = "<div class=\"weather\"></div>";
-$('head').append('<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700,800,900&display=swap" rel="stylesheet">');
-$('head').append('  <link rel="stylesheet" href="assets/css/style.css">');
-//$('body').append('<div class="container">  </div>');
-$('.container').append('<div class="weather">  </div>');
+//HEAD 
+let head = document.getElementsByTagName("head")[0];
+head.innerHTML = `<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700,800,900&display=swap" rel="stylesheet">`;
+head.innerHTML += `<link rel="stylesheet" href="assets/css/style.css">`;
+
+//BODY
+let body = document.getElementsByTagName("body")[0];
+body.innerHTML = '<div class="container"> </div>';
+let container = document.querySelector('.container');
+container.innerHTML = '<div class="weather"></div>';
+
 
 ///////////////////////////////// AJAX ///////////////////////////////// 
 
 //First variable of getLocation is an AJAX call (promises built in ajax via jquery instead of writing new Promise in vanilla)
 //This data is then used on the ajax call variable getWeather. 
+
+let getLoc = new XMLHttpRequest();
+getLoc.open("GET", "https://geolocation-db.com/json/0f761a30-fe14-11e9-b59f-e53803842572", true);
+getLoc.responseType ='json';
+getLoc.send();
+console.log(getLoc);
 
 let getLocation =  $.ajax({
   type: "GET",
