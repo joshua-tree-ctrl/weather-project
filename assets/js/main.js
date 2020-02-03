@@ -1,9 +1,3 @@
-// require js file included in assets/js
-requirejs(['jquery'],
-function   ($) {
-  
-//jQuery loaded and can be used here now.
-
 ///////////////////////////////// BASE DIVS ///////////////////////////////// 
 
 //HEAD 
@@ -27,72 +21,27 @@ container.innerHTML = '<div class="weather"></div>';
 const fetchPromise = fetch("https://geolocation-db.com/json/0f761a30-fe14-11e9-b59f-e53803842572");
 fetchPromise.then(response => {
   return response.json();
-}).then(function(location){
+}).then(location => {
   return fetch(`https://api.weatherbit.io/v2.0/forecast/daily?city=${location.city},${location.country_code}&days=4&key=959dca19c5aa40b084f4991fa3a58145`)
 }).then(response => {
   return response.json();
 }).then(getWeather => {
-  console.log(getWeather);
+//console.log(getWeather);
   
-// Object destructuring assignment
-let {city_name:city, country_code:code, data, timezone:time, ...rest} = getWeather; 
-console.log(data);
-
-}).catch(error => {alert(error); })
-
-let getLocation =  $.ajax({
-  type: "GET",
-  url: "https://geolocation-db.com/json/0f761a30-fe14-11e9-b59f-e53803842572 ",
-  dataType:'json'
-});
-
-//Using THEN().. Pass any parameter into the function of the then() to return the data from the getLocation (1st call) ajax call variable. 
-//let getWeather = getLocation.then() function, which will return the weather (2nd ajax call) utilising data from the first ajax call (chained). 
-let getWeather = getLocation.then((location) => {
-
-  return $.ajax({
-    type: "GET",
-    url: `https://api.weatherbit.io/v2.0/forecast/daily?city=${location.city},${location.country_code}&days=4&key=959dca19c5aa40b084f4991fa3a58145`,
-    success: () => {
-      $('.weather').children('.loading').remove();
-    },
-    beforeSend: () => {
-      $(".weather").prepend(
-        '<div class="loading"><img src="assets/img/ajax-loader-weather.gif" alt="Loading" /></div>'
-      );
-    }
-  });
-}); 
-
-//Fail 
-getWeather.fail(()=>{alert("There was an error getting weather data.");});
-
-//Passed results from getWeather into parameter 'promiseDone' via done(). 
-//Use ajax promise.done data to build UI
-getWeather.done((promiseDone) => {
-//console.log(promiseDone); // It first starts as an Object with a data key that contains 4 arrays as a property, amongst other keys/properties. 
-///////////////////////////////// UI BUILD ///////////////////////////////// 
-
-
-// Object destructuring assignment
-let {city_name:city, country_code:code, data, timezone:time, ...rest} = promiseDone; 
-
-//console.log(data); //Then object destructuring occurs which pulls the required keys and places them into their own variables. You dont need to loop city, code, timezone.
+//Object destructuring occurs which pulls the required keys and places them into their own variables. You dont need to loop city, code, timezone.
 //You place data (the key with a 4 property array, which contain an object in each array point) into its own variable. 
-
 //As destructuring is not a loop but simply extracting chosen key/properties, you could not then unpack each object key/property at each point in the 4 array, you'd only end up removing array keys like [0] or [2]. 
-//You couldn't object destructure as above either, as it is not an object yet, its an array. 
 
-//Instead we use map() on data
-//Must wrap the returning object literal into parentheses. Otherwise curly braces will be considered to denote the function’s body. The following works:
+// Object destructuring assignment
+let {city_name:city, country_code:code, data, timezone:time} = getWeather; 
+
+//You couldn't object destructure as above either, as it is not an object yet, its an array. 
+//Instead we use map() on data. Must wrap the returning object literal into parentheses.
+//.map() can be used to iterate through objects in an array - modify the content of each individual object - return a new array.  
 let weatherInfo = data.map(({temp, max_temp, min_temp, weather, valid_date}) => ({temp, max_temp, min_temp, weather, valid_date})); 
-//.map() can be used to iterate through objects in an array and in a similar fashion to traditional arrays, *modify the content of each individual object *and return a new array. weatherInfo above says to map the data array containing objects, and to take those key/properties and place only them into new array. 
-// those parameters are the original key/property values, and store only these into weatherInfo. Map takes an array  and creates a new array returning the object keys/properties required 
-//console.log(weatherInfo);
 
 //Select main div.weather 
 let weatherSelector = document.querySelector(".weather");
-
 
 //Display Location
 weatherSelector.innerHTML = `<div class="weather__location"> ${city}, ${code} </div>`;
@@ -108,32 +57,30 @@ let tempRound = (temp) => {
     day: "numeric"
   };
 
-  
+   
 //Loop array of objects with es6 for-of to display 4 days of weather data. 
 for (const w of weatherInfo) {
   
-    //Format date for each date looped
-    let weatherDate = w.valid_date;
-    let dateParse = new Date(weatherDate);
-    let dateFormatted = dateParse.toLocaleDateString("en-GB", options);
+  //Format date for each date looped
+  let weatherDate = w.valid_date;
+  let dateParse = new Date(weatherDate);
+  let dateFormatted = dateParse.toLocaleDateString("en-GB", options);
 
-    //Display formatted date
-     weatherSelector.innerHTML += `<div class="weather__date"> ${dateFormatted}  </div>` ;
+  //Display formatted date
+   weatherSelector.innerHTML += `<div class="weather__date"> ${dateFormatted}  </div>` ;
 
-    //Icon
-     weatherSelector.innerHTML += `<img class="weather__icon" src="https://www.weatherbit.io/static/img/icons/${w.weather.icon}.png" alt="weather icon" ></img>` ;
-   
-    //Weather Description 
-    weatherSelector.innerHTML += `<div class="weather__desc">  ${w.weather.description} </div>`;
+  //Icon
+   weatherSelector.innerHTML += `<img class="weather__icon" src="https://www.weatherbit.io/static/img/icons/${w.weather.icon}.png" alt="weather icon" ></img>` ;
+ 
+  //Weather Description 
+  weatherSelector.innerHTML += `<div class="weather__desc">  ${w.weather.description} </div>`;
 
-    //Temperature
-    weatherSelector.innerHTML +=  `<div class="weather__temp"> ${tempRound(w.temp)}&#176; </div>`;
+  //Temperature
+  weatherSelector.innerHTML +=  `<div class="weather__temp"> ${tempRound(w.temp)}&#176; </div>`;
 
-    //Minimum and maximum temperature 
-    weatherSelector.innerHTML +=`<div class="weather__temp__minmax">   H: ${tempRound(w.max_temp)}&#176; L: ${tempRound(w.min_temp)} &#176; </div>` ;
-  }
-});
+  //Minimum and maximum temperature 
+  weatherSelector.innerHTML +=`<div class="weather__temp__minmax">   H: ${tempRound(w.max_temp)}&#176; L: ${tempRound(w.min_temp)} &#176; </div>` ;
+}
 
-});
-
+}).catch(error => {alert(error); })
  
