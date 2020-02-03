@@ -62,11 +62,10 @@ let weatherInfo = data.map(({temp, max_temp, min_temp, weather, valid_date}) => 
 // those parameters are the original key/property values, and store only these into weatherInfo. Map takes an array  and creates a new array returning the object keys/properties required 
 //console.log(weatherInfo);
 
+let weatherClass = document.querySelector(".weather");
 
 //Display Location
-$(".weather").append(
-  `<div class="weather__location"> ${city}, ${code} </div>` 
- );
+weatherClass.innerHTML = `<div class="weather__location"> ${city}, ${code} </div>`;
 
 //Rounding temperature function
 let tempRound = (temp) => {
